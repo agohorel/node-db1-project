@@ -7,8 +7,9 @@ const server = express();
 server.use(express.json());
 
 server.get("/", async (req, res) => {
+  const { limit, sortBy, sortDir } = req.query;
   try {
-    const items = await find("accounts");
+    const items = await find("accounts", limit, sortBy, sortDir);
     res.status(200).json(items);
   } catch (error) {
     res.status(500).json({ error: "Server error" });
@@ -55,8 +56,10 @@ server.delete("/:id", async (req, res) => {
 
 module.exports = server;
 
-function find(table) {
-  return db(table);
+function find(table, limit = 9999, sortBy = "name", sortDir = "asc") {
+  return db(table)
+    .limit(limit)
+    .orderBy(sortBy, sortDir);
 }
 
 function findByID(table, id) {
