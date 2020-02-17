@@ -25,6 +25,15 @@ server.get("/:id", async (req, res) => {
   }
 });
 
+server.get("/api/distinct", async (req, res) => {
+  try {
+    const distinct = await getDistinct("accounts", "name");
+    res.status(200).json(distinct);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+});
+
 server.post("/", async (req, res) => {
   try {
     const newID = await insert("accounts", req.body);
@@ -82,4 +91,8 @@ function remove(table, id) {
   return db(table)
     .where({ id: Number(id) })
     .delete();
+}
+
+function getDistinct(table, field) {
+  return db(table).distinct(field);
 }
