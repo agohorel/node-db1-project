@@ -6,7 +6,7 @@ const server = express();
 
 server.use(express.json());
 
-server.get("/", async (req, res) => {
+server.get("/accounts", async (req, res) => {
   const { limit, sortBy, sortDir } = req.query;
   try {
     const items = await find("accounts", limit, sortBy, sortDir);
@@ -16,7 +16,7 @@ server.get("/", async (req, res) => {
   }
 });
 
-server.get("/:id", async (req, res) => {
+server.get("/accounts/:id", async (req, res) => {
   try {
     const item = await findByID("accounts", req.params.id);
     res.status(200).json(item);
@@ -25,7 +25,7 @@ server.get("/:id", async (req, res) => {
   }
 });
 
-server.get("/api/distinct", async (req, res) => {
+server.get("/distinct", async (req, res) => {
   try {
     const distinct = await getDistinct("accounts", "name");
     res.status(200).json(distinct);
@@ -34,7 +34,7 @@ server.get("/api/distinct", async (req, res) => {
   }
 });
 
-server.post("/", async (req, res) => {
+server.post("/accounts", async (req, res) => {
   try {
     const newID = await insert("accounts", req.body);
     const newPost = await findByID("accounts", newID);
@@ -44,7 +44,7 @@ server.post("/", async (req, res) => {
   }
 });
 
-server.put("/:id", async (req, res) => {
+server.put("/accounts/:id", async (req, res) => {
   try {
     await update("accounts", req.params.id, req.body);
     const updatedPost = await findByID("accounts", req.params.id);
@@ -54,7 +54,7 @@ server.put("/:id", async (req, res) => {
   }
 });
 
-server.delete("/:id", async (req, res) => {
+server.delete("/accounts/:id", async (req, res) => {
   try {
     const deleted = await remove("accounts", req.params.id);
     res.status(200).json({ message: `successfully deleted ${deleted} items` });
